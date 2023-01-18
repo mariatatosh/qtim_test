@@ -1,6 +1,7 @@
 up: docker-up
 rebuild: docker-down docker-build docker-up
 stop: docker-stop
+down: docker-down
 
 docker-up:
 	docker compose up -d
