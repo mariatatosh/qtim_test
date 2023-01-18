@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+    api-php-cli:
+        build:
+            context: docker/api/php-cli
+        volumes:
+            - ./api:/app
+        restart: on-failure
+
+    frontend-node-cli:
+        build:
+            context: docker/frontend/node-cli
+        volumes:
+            - ./frontend:/app
+        restart: on-failure
+
+    mysql:
+        image: mysql:8.0.31
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        restart: on-failure
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        environment:
+            PMA_HOST: mysql
+        ports:
+            - "5000:80"
+        restart: on-failure
