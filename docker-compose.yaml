@@ -4,6 +4,7 @@ services:
     api-php-cli:
         build:
             context: docker/api/php-cli
+        user: '1000:1000'
         volumes:
             - ./api:/app
         restart: on-failure
@@ -11,6 +12,7 @@ services:
     frontend-node-cli:
         build:
             context: docker/frontend/node-cli
+        user: '1000:1000'
         volumes:
             - ./frontend:/app
         restart: on-failure
@@ -19,6 +21,7 @@ services:
         image: mysql:8.0.31
         environment:
             MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: news
         restart: on-failure
 
     phpmyadmin:
