@@ -6,7 +6,7 @@ class ApiService {
     }
 
     #makeUrl(path) {
-        return `http://localhost:8081/api/${this.service}/${path ? path + '/' : ''}`;
+        return `http://localhost:8081/api/${this.service}${path ? '/' + path : ''}`;
     }
 
     #assertMethod(method) {
