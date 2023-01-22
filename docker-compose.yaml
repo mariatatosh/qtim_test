@@ -6,7 +6,7 @@ services:
         volumes:
             - ./api:/app
         ports:
-            - '8080:80'
+            - '8081:80'
         restart: on-failure
 
     api-php-fpm:
@@ -22,6 +22,15 @@ services:
         user: '1000:1000'
         volumes:
             - ./api:/app
+        restart: on-failure
+
+    frontend-node:
+        build: docker/frontend/node
+        volumes:
+            - ./frontend:/app
+        command: 'yarn serve'
+        ports:
+            - '8080:8080'
         restart: on-failure
 
     frontend-node-cli:
