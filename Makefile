@@ -15,3 +15,9 @@ docker-build:
 
 docker-stop:
 	docker compose stop
+
+migrations-run:
+	docker compose run --rm api-php-cli php bin/console doctrine:migrations:migrate -q
+
+migrations-diff:
+	docker compose run --rm api-php-cli php bin/console doctrine:migrations:diff
