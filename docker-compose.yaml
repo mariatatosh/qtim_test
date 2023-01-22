@@ -1,17 +1,29 @@
 version: '3.9'
 
 services:
+    api-nginx:
+        build: docker/api/nginx
+        volumes:
+            - ./api:/app
+        ports:
+            - '8080:80'
+        restart: on-failure
+
+    api-php-fpm:
+        build: docker/api/php-fpm
+        volumes:
+            - ./api:/app
+        restart: on-failure
+
     api-php-cli:
-        build:
-            context: docker/api/php-cli
+        build: docker/api/php-cli
         user: '1000:1000'
         volumes:
             - ./api:/app
         restart: on-failure
 
     frontend-node-cli:
-        build:
-            context: docker/frontend/node-cli
+        build: docker/frontend/node-cli
         user: '1000:1000'
         volumes:
             - ./frontend:/app
@@ -29,5 +41,5 @@ services:
         environment:
             PMA_HOST: mysql
         ports:
-            - "5000:80"
+            - '5000:80'
         restart: on-failure
