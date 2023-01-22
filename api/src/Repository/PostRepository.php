@@ -25,4 +25,14 @@ final class PostRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($post);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * @param string $slug
+     *
+     * @return bool
+     */
+    public function hasBySlug(string $slug): bool
+    {
+        return count($this->getEntityManager()->getRepository(Post::class)->findBy(['slug' => $slug])) > 0;
+    }
 }
