@@ -14,6 +14,8 @@ services:
         volumes:
             - ./api:/app
         restart: on-failure
+        environment:
+            PHP_IDE_CONFIG: serverName=API
 
     api-php-cli:
         build: docker/api/php-cli
