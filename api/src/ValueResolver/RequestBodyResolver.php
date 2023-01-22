@@ -30,7 +30,7 @@ final class RequestBodyResolver implements ValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        if ($request->getContentTypeFormat() !== 'json') {
+        if (! $this->supports($request, $argument)) {
             return [];
         }
 
@@ -55,5 +55,16 @@ final class RequestBodyResolver implements ValueResolverInterface
         }
 
         return [$body];
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request                         $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
+     *
+     * @return bool
+     */
+    private function supports(Request $request, ArgumentMetadata $argument): bool
+    {
+        return $request->getContentTypeFormat() === 'json' && $argument->getName() === 'request';
     }
 }

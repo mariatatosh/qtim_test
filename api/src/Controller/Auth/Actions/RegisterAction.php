@@ -5,24 +5,21 @@ declare(strict_types=1);
 namespace App\Controller\Auth\Actions;
 
 use App\Controller\Auth\Requests\RegisterRequest;
-use App\Entity\Types\Email\Email;
-use App\Entity\Types\Id\Id;
-use App\Entity\User\User;
-use App\Repository\UserRepository;
+use App\Exception\User\EmailAlreadyInUse;
+use App\UseCase\UserCreate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class RegisterAction extends AbstractController
 {
     /**
-     * @param \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $hasher
-     * @param \App\Repository\UserRepository                                       $users
+     * @param \Symfony\Component\Messenger\MessageBusInterface $commandBus
      */
     public function __construct(
-        private readonly UserPasswordHasherInterface $hasher,
-        private readonly UserRepository              $users
+        private readonly MessageBusInterface $commandBus
     )
     {
     }
@@ -35,21 +32,24 @@ final class RegisterAction extends AbstractController
     #[Route('/register', name: 'auth_register', methods: 'POST')]
     public function __invoke(RegisterRequest $request): JsonResponse
     {
-        $email = new Email($request->getEmail());
-
-        if ($this->users->hasByEmail($email)) {
-            return new JsonResponse([
-                'message' => 'User with such email already exists',
-            ]);
+        try {
+            $this->commandBus->dispatch(
+                new UserCreate\Command(
+                    $request->getEmail(),
+                    $request->getPassword()
+                )
+            );
+        } catch (EmailAlreadyInUse $e) {
+            return new JsonResponse(
+                [
+                    'errors' => [
+                        'property' => 'email',
+                        'message'  => $e->getMessage(),
+                    ]
+                ],
+                Response::HTTP_CONFLICT
+            );
         }
-
-        $user = new User(Id::generate(), $email);
-
-        $password = $this->hasher->hashPassword($user, $request->getPassword());
-
-        $user->setPassword($password);
-
-        $this->users->save($user);
 
         return new JsonResponse();
     }
