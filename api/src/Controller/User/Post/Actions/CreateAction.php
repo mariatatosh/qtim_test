@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\User\Post\Actions;
 
 use App\Controller\User\Post\Requests\CreateRequest;
+use App\Service\Auth\AuthService;
 use App\UseCase\PostCreate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,9 +16,11 @@ final class CreateAction extends AbstractController
 {
     /**
      * @param \Symfony\Component\Messenger\MessageBusInterface $commandBus
+     * @param \App\Service\Auth\AuthService                    $authService
      */
     public function __construct(
-        private readonly MessageBusInterface $commandBus
+        private readonly MessageBusInterface $commandBus,
+        private readonly AuthService $authService
     )
     {
     }
@@ -35,7 +38,9 @@ final class CreateAction extends AbstractController
                 $request->getTitle(),
                 $request->getContent(),
                 $request->getImage(),
-                $request->getAuthorId()
+                $this->authService->isAuthenticated()
+                    ? $this->authService->getCurrentUser()->getId()
+                    : null
             )
         );
 
