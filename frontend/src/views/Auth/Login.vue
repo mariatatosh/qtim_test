@@ -5,7 +5,10 @@
         <v-row>
           <v-text-field
               v-model="email"
-              :rules="emailRules"
+              :rules="[
+                v => !!v || 'E-mail is required',
+                v => /.+@.+/.test(v) || 'E-mail must be valid',
+              ]"
               label="E-mail"
               variant="outlined"
               color="primary"
@@ -19,6 +22,7 @@
           <v-text-field
               v-model="password"
               :rules="[v => !!v || 'Password is required']"
+              type="password"
               label="Password"
               variant="outlined"
               color="primary"
@@ -53,6 +57,10 @@
 <script>
 import AppPage from '@/components/App/AppPage.vue';
 
+import AuthApi from '@/api/Auth/AuthApi';
+
+const authApi = new AuthApi();
+
 export default {
   name: 'Login',
   components: {
@@ -62,14 +70,16 @@ export default {
     valid: false,
     email: '',
     password: '',
-    emailRules: [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
   }),
   methods: {
-    submit() {
+    async submit() {
+      try {
+        const { email, password } = this;
 
+        await authApi.login(email, password);
+      } catch (e) {
+        //
+      }
     },
   },
 }
