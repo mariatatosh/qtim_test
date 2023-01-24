@@ -71,7 +71,7 @@
 <script>
 import AppPage from '@/components/App/AppPage.vue';
 
-import AuthApi from '@/api/AuthApi';
+import AuthApi from '@/api/Auth/AuthApi';
 
 const authApi = new AuthApi();
 
