@@ -1,5 +1,3 @@
-import { createRouter, createWebHistory } from 'vue-router';
-
 import Home from '@/views/Home/Home.vue';
 
 import PostCreate from '@/views/Post/PostCreate.vue';
@@ -8,7 +6,7 @@ import PostList from '@/views/Post/PostList.vue';
 import Register from '@/views/Auth/Register.vue';
 import Login from '@/views/Auth/Login.vue';
 
-const routes = [
+export default [
     {
         path: '/',
         component: Home,
@@ -35,8 +33,3 @@ const routes = [
         name: 'auth.login',
     }
 ];
-
-export default createRouter({
-    history: createWebHistory(),
-    routes,
-});
