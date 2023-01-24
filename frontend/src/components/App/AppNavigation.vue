@@ -1,15 +1,18 @@
 <template>
   <v-sheet rounded="lg">
     <v-list rounded="lg">
-      <v-list-item
+      <router-link
           v-for="link in links"
           :key="link.path"
-          link
+          :to="link.path"
+          class="text-uppercase text-decoration-none text-black"
       >
-        <v-list-item-title class="text-uppercase">
-          <router-link :to="link.path" class="text-decoration-none text-black">{{ link.label }}</router-link>
-        </v-list-item-title>
-      </v-list-item>
+        <v-list-item link>
+          <v-list-item-title class="text-uppercase">
+            {{ link.label }}
+          </v-list-item-title>
+        </v-list-item>
+      </router-link>
 
       <v-divider class="my-2" />
 
