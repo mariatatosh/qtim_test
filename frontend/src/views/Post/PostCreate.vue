@@ -71,10 +71,10 @@ export default {
     async submit() {
       const { title, content, image } = this;
 
-      console.log(title, content, image);
-
       try {
         await postApi.create({ title, content, image });
+
+        this.$router.push({ name: 'posts.list' });
       } catch (e) {
         //
       }
