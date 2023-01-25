@@ -29,14 +29,11 @@ final class ListAction extends AbstractController
         return new JsonResponse(
             array_map(
                 static fn(Post $post): PostModel => new PostModel(
-                    $post->getId()->getValue(),
-                    $post->getTitle(),
-                    $post->getSlug(),
-                    $post->getImage(),
-                    $post->getContent(),
-                    $post->getAuthor()?->getEmail(),
-                    $post->getCreatedAt(),
-                    $post->getUpdatedAt()
+                    title: $post->getTitle(),
+                    slug: $post->getSlug(),
+                    image: $post->getImage(),
+                    author: $post->getAuthor()?->getEmail(),
+                    createdAt: $post->getCreatedAt()->format('Y-m-d H:i:s'),
                 ),
                 $this->getPosts()
             )

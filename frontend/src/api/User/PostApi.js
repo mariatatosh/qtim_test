@@ -5,6 +5,12 @@ class PostApi extends ApiService {
         super('user/posts');
     }
 
+    async list() {
+        return await this.request({
+            method: 'GET',
+        });
+    }
+
     async create({ title, content, image = null }) {
         return await this.request({
            body: {
