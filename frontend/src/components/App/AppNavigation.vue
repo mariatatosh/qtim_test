@@ -5,7 +5,7 @@
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="text-uppercase text-decoration-none text-black"
+          class="text-decoration-none text-black"
       >
         <v-list-item link>
           <v-list-item-title class="text-uppercase">
@@ -16,14 +16,16 @@
 
       <v-divider class="my-2" />
 
-      <v-list-item
-          link
-          color="grey-lighten-4"
+      <router-link
+          :to="{ name: 'auth.login' }"
+          class="text-decoration-none text-black"
       >
-        <v-list-item-title>
-          LOGOUT
-        </v-list-item-title>
-      </v-list-item>
+        <v-list-item link color="grey-lighten-4">
+          <v-list-item-title class="text-uppercase">
+            Login
+          </v-list-item-title>
+        </v-list-item>
+      </router-link>
     </v-list>
   </v-sheet>
 </template>
